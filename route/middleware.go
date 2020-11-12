@@ -1,8 +1,13 @@
 package route
 
-import "strings"
+import (
+	"strings"
 
-func CorsHandler() context.Handler {
+	"github.com/iris-contrib/middleware/cors"
+	"github.com/kataras/iris/v12"
+)
+
+func CorsHandler() iris.Handler {
 	crs := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"}, //允许通过的主机名称
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -12,7 +17,7 @@ func CorsHandler() context.Handler {
 	return crs
 }
 
-func JwtAuthHandler(ctx context.Context) {
+func JwtAuthHandler(ctx iris.Context) {
 	path := ctx.Path()
 	//登录与静态资源页直接跳过
 	if strings.Contains(path, "/static") || strings.Contains(path, "/login") {
@@ -20,8 +25,8 @@ func JwtAuthHandler(ctx context.Context) {
 		return
 	}
 	// jwt token拦截
-	if !jwts.Serve(ctx) {
-		return
-	}
+	// if !jwts.Serve(ctx) {
+	// 	return
+	// }
 	ctx.Next()
 }

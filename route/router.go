@@ -1,7 +1,8 @@
 package route
 
 import (
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/mvc"
 	"github.com/qiusnay/gocronadmin/api"
 )
 
@@ -15,11 +16,16 @@ func RegisterRouter(app *iris.Application) {
 		ctx.HTML("<h1>Welcome</h1>")
 	})
 
-	// 用户API模块
-	user := main.Party("/user")
-	user.Post("/login", api.User.Login)
+	mvc.Configure(app.Party("/user"), func(app *mvc.Application) {
+		app.Handle(new(api.User))
+	})
 
-	// // 权限API模块
+	// 用户API模块
+	// user := main.Party("/user")
+	// app.Handle("GET", "/user", new(api.User))
+	// user.Get("/userinfo", api.User{})
+
+	// 权限API模块
 	// admin := main.Party("/admin")
 	// {
 	// 	// 用户管理
