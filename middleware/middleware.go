@@ -1,10 +1,11 @@
-package route
+package middleware
 
 import (
 	"strings"
 
 	"github.com/iris-contrib/middleware/cors"
 	"github.com/kataras/iris/v12"
+	"github.com/qiusnay/gocronapi/middleware/jwt"
 )
 
 func CorsHandler() iris.Handler {
@@ -12,7 +13,7 @@ func CorsHandler() iris.Handler {
 		AllowedOrigins: []string{"*"}, //允许通过的主机名称
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders: []string{"*"},
-		Debug:          true,
+		Debug:          false,
 	})
 	return crs
 }
@@ -25,8 +26,8 @@ func JwtAuthHandler(ctx iris.Context) {
 		return
 	}
 	// jwt token拦截
-	// if !jwts.Serve(ctx) {
-	// 	return
-	// }
+	if !jwt.Serve(ctx) {
+		return
+	}
 	ctx.Next()
 }

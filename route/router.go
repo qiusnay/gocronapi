@@ -1,21 +1,24 @@
 package route
 
 import (
+	"fmt"
+
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
-	"github.com/qiusnay/gocronadmin/api"
+	"github.com/qiusnay/gocronapi/api"
+	"github.com/qiusnay/gocronapi/middleware"
 )
 
 func RegisterRouter(app *iris.Application) {
 	/* 定义路由 */
-	main := app.Party("/", CorsHandler()).AllowMethods(iris.MethodOptions)
-	main.Use(JwtAuthHandler)
+	main := app.Party("/", middleware.CorsHandler()).AllowMethods(iris.MethodOptions)
+	main.Use(middleware.JwtAuthHandler)
 
 	home := main.Party("/")
 	home.Get("/", func(ctx iris.Context) { // 首页模块
 		ctx.HTML("<h1>Welcome</h1>")
 	})
-
+	fmt.Println(8888888)
 	mvc.Configure(app.Party("/user"), func(app *mvc.Application) {
 		app.Handle(new(api.User))
 	})
